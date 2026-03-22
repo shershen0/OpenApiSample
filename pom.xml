@@ -12,13 +12,14 @@
     <modules>
         <module>openapi-contract</module>
         <module>backend-spring</module>
+        <module>kotlin-test-client</module>
     </modules>
 
     <properties>
         <java.version>21</java.version>
+        <kotlin.version>1.9.25</kotlin.version>
         <spring.boot.version>3.5.6</spring.boot.version>
         <openapi.generator.version>7.15.0</openapi.generator.version>
-        <kotlin.version>2.2.20</kotlin.version>
         <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

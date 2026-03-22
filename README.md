@@ -7,6 +7,7 @@
     - [1. The specification](#1-the-specification)
     - [2. The generators](#2-the-generators)
 - [How it works in this project](#how-it-works-in-this-project)
+- [Kotlin client example](#kotlin-client-example)
 - [Development flow](#development-flow)
 - [How to run](#how-to-run)
 - [Swagger UI](#swagger-ui)
@@ -143,6 +144,64 @@ The exact generator configuration can be found in the backend POM file: [backend
 
 ---
 
+## Kotlin client example
+
+This project also includes a small Kotlin client example in the kotlin-test-client module.
+
+It uses the same openapi.yaml file, but instead of the Spring generator it uses the Kotlin generator. This demonstrates that the same API contract can be reused for another platform.
+
+```yaml
+<plugin>
+    <groupId>org.openapitools</groupId>
+    <artifactId>openapi-generator-maven-plugin</artifactId>
+    <version>${openapi.generator.version}</version>
+    <executions>
+        <execution>
+            <id>generate-kotlin-client</id>
+            <phase>generate-sources</phase>
+            <goals>
+                <goal>generate</goal>
+            </goals>
+            <configuration>
+                <inputSpec>${project.parent.basedir}/openapi-contract/src/main/resources/openapi.yaml</inputSpec>
+                <generatorName>kotlin</generatorName>
+
+                <apiPackage>org.example.client.kotlin.api</apiPackage>
+                <modelPackage>org.example.client.kotlin.model</modelPackage>
+                <invokerPackage>org.example.client.kotlin.invoker</invokerPackage>
+
+                <generateApiTests>false</generateApiTests>
+                <generateModelTests>false</generateModelTests>
+                <generateApiDocumentation>false</generateApiDocumentation>
+                <generateModelDocumentation>false</generateModelDocumentation>
+
+                <configOptions>
+                    <!-- The Kotlin generator supports multiple libraries depending on the target platform -->
+                    <!-- and HTTP client stack, for example jvm-okhttp4, jvm-ktor, jvm-retrofit2, -->
+                    <!-- jvm-spring-webclient, multiplatform, and others. -->
+                    <!-- In this sample we use jvm-okhttp4 because it is a simple JVM client setup -->
+                    <!-- that works well for demonstrating a Kotlin/Android-style client. -->
+                    <!-- list of available libraries https//openapi-generator.tech/docs/generators/kotlin -->
+                    <library>jvm-okhttp4</library>
+                    <serializationLibrary>moshi</serializationLibrary>
+                    <dateLibrary>java8</dateLibrary>
+                    <enumPropertyNaming>UPPERCASE</enumPropertyNaming>
+                </configOptions>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+```
+
+As a sample output of the kotlin client (Spring Boot backend server should be up and running for this):
+
+```Output
+Created task: Task(id=999614bd-ccae-4b9e-a539-6a8ac0363607, title=Learn OpenAPI, status=OPEN, description=Use one contract for backend and client generation)
+All tasks: [Task(id=999614bd-ccae-4b9e-a539-6a8ac0363607, title=Learn OpenAPI, status=OPEN, description=Use one contract for backend and client generation)]
+```
+
+---
+
 ## Development flow
 
 A simple workflow for this project is:
@@ -162,6 +221,11 @@ From the root project directory:
 ```bash
 mvn clean install
 mvn -pl backend-spring spring-boot:run
+```
+
+```bash
+# if you want to run kotlin client 
+mvn -pl kotlin-test-client compile exec:java
 ```
 
 ---
