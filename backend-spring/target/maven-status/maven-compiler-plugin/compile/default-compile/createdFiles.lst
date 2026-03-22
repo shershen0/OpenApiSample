@@ -1,0 +1,12 @@
+org/example/Main.class
+org/example/generated/model/Task.class
+org/example/service/InMemoryTaskService.class
+org/example/service/TaskService.class
+org/example/generated/model/UpdateTaskStatusRequest.class
+org/example/generated/api/TasksApi.class
+org/example/generated/model/CreateTaskRequest.class
+org/openapitools/configuration/EnumConverterConfiguration$1.class
+org/example/generated/api/ApiUtil.class
+org/example/generated/model/TaskStatus.class
+org/example/controller/TasksApiController.class
+org/openapitools/configuration/EnumConverterConfiguration.class

@@ -1,0 +1,132 @@
+openapi: 3.0.3
+info:
+  title: Task API
+  version: 1.0.0
+  description: Sample contract-first API
+
+servers:
+  - url: http://localhost:8080
+tags:
+  - Tasks
+
+paths:
+  /tasks:
+    get:
+      tags:
+        - Tasks
+      operationId: getTasks
+      summary: Get all tasks
+      responses:
+        '200':
+          description: List of tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+
+    post:
+      tags:
+        - Tasks
+      operationId: createTask
+      summary: Create a task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskRequest'
+      responses:
+        '201':
+          description: Task created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+
+  /tasks/{taskId}:
+    get:
+      tags:
+        - Tasks
+      operationId: getTaskById
+      summary: Get task by id
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Task found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '404':
+          description: Task not found
+
+  /tasks/{taskId}/status:
+    patch:
+      tags:
+        - Tasks
+      operationId: updateTaskStatus
+      summary: Update task status
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskStatusRequest'
+      responses:
+        '200':
+          description: Updated task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+
+components:
+  schemas:
+    Task:
+      type: object
+      required: [id, title, status]
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          $ref: '#/components/schemas/TaskStatus'
+
+    CreateTaskRequest:
+      type: object
+      required: [title]
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+
+    UpdateTaskStatusRequest:
+      type: object
+      required: [status]
+      properties:
+        status:
+          $ref: '#/components/schemas/TaskStatus'
+
+    TaskStatus:
+      type: string
+      enum:
+        - OPEN
+        - IN_PROGRESS
+        - DONE
